@@ -35,9 +35,20 @@
         
         <div class="col-md-4">
             <div class="card shadow-sm">
-                <img src="https://via.placeholder.com/400x300?text=Foto+Ricetta" class="card-img-top" alt="Anteprima">
+                
+                <img th:if="${recipe.imagePath}" 
+                     th:src="@{${recipe.imagePath}}" 
+                     class="card-img-top" 
+                     style="object-fit: cover; height: 300px;" 
+                     alt="Foto Ricetta">
+                
+                <img th:unless="${recipe.imagePath}" 
+                     src="https://via.placeholder.com/400x300?text=Nessuna+Foto" 
+                     class="card-img-top" 
+                     alt="Anteprima">
+
                 <div class="card-body">
-                    <p class="card-text text-center text-muted">Immagine della ricetta</p>
+                    <p class="card-text text-center text-muted" th:text="${recipe.title}">Didascalia</p>
                 </div>
             </div>
             

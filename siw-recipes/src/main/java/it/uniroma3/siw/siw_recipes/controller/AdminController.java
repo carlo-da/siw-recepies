@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import it.uniroma3.siw.siw_recipes.model.Category;
 import it.uniroma3.siw.siw_recipes.model.User;
+import it.uniroma3.siw.siw_recipes.repository.CategoryRepository;
 import it.uniroma3.siw.siw_recipes.repository.RecipeRepository;
 import it.uniroma3.siw.siw_recipes.repository.UserRepository;
 
@@ -18,6 +21,7 @@ public class AdminController {
 
     @Autowired private UserRepository userRepository;
     @Autowired private RecipeRepository recipeRepository;
+    @Autowired private CategoryRepository categoryRepository;
 
     // -----VISUALIZZAZIONE UTENTI------
     @GetMapping("/users")
@@ -53,5 +57,28 @@ public class AdminController {
     public String deleteRecipe(@PathVariable("id") Long id) {
         recipeRepository.deleteById(id);
         return "redirect:/recipe/all";
+    }
+
+    // -------GESTIONE CATEGORIE-------
+    @GetMapping("/categories")
+    public String adminCategories(Model model) {
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("category", new Category()); // Per il form di inserimento
+        return "admin/categories";
+    }
+
+    @PostMapping("/categories")
+    public String addCategory(@ModelAttribute("category") Category category, Model model) {
+        if (!categoryRepository.existsByName(category.getName())) {
+            categoryRepository.save(category);
+        }
+        return "redirect:/admin/categories";
+    }
+    
+    @PostMapping("/categories/delete/{id}")
+    public String deleteCategory(@PathVariable("id") Long id) {
+        // Per ora assumiamo di cancellare solo categorie vuote o gestiamo la logica dopo.
+        categoryRepository.deleteById(id);
+        return "redirect:/admin/categories";
     }
 }

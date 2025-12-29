@@ -1,6 +1,8 @@
 package it.uniroma3.siw.siw_recipes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,12 +35,23 @@ public class AuthenticationController {
     // -----HOME PAGE-----
     @GetMapping(value = {"/", "/index"})
     public String index(Model model) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();//Se l'utente è loggato, possiamo passare il suo nome alla vista
-        if (principal instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) principal;
-            model.addAttribute("username", userDetails.getUsername());
-        }
-        return "index"; // Ritorna index.html
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    
+    // Controlla se l'utente è loggato
+    if (authentication != null && authentication.isAuthenticated() && 
+        !(authentication instanceof AnonymousAuthenticationToken)) {
+            
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        model.addAttribute("username", userDetails.getUsername());
+        
+        // Controlliamo se ha il ruolo ADMIN
+        boolean isAdmin = userDetails.getAuthorities().stream()
+            .anyMatch(a -> a.getAuthority().equals("ADMIN") || a.getAuthority().equals("ROLE_ADMIN"));
+        
+        model.addAttribute("isAdmin", isAdmin);
+    }
+    
+    return "index"; // Ritorna index.html
     }
 
     // -----REGISTRAZIONE (GET: Mostra il form)-----

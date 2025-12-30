@@ -74,11 +74,4 @@ public class RecipeController {
         return "redirect:/recipe/" + savedRecipe.getId();
     }
 
-    @GetMapping("/recipe/form")
-    public String formNewRecipe(Model model) {
-        model.addAttribute("recipe", new Recipe());
-        model.addAttribute("categories", categoryRepository.findAll());
-        
-        return "recipeForm";
-    }
 }

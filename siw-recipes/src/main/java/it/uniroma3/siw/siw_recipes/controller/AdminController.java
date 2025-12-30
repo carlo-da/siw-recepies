@@ -77,7 +77,7 @@ public class AdminController {
     
     @PostMapping("/categories/delete/{id}")
     public String deleteCategory(@PathVariable("id") Long id) {
-        // Per ora assumiamo di cancellare solo categorie vuote o gestiamo la logica dopo.
+        // Per ora assumiamo di cancellare solo categorie vuote
         categoryRepository.deleteById(id);
         return "redirect:/admin/categories";
     }

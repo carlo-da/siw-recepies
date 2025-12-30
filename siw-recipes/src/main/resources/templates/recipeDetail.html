@@ -34,6 +34,19 @@
             </div>
 
             <hr>
+            
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h4>Ingredienti</h4>
+                    <ul>
+                        <li th:each="ing : ${recipe.ingredients}">
+                            <strong th:text="${ing.quantity}">Quantità</strong>
+                            <span th:text="${ing.name}">Nome Ingrediente</span>
+                        </li>
+                    </ul>
+                    <p th:if="${recipe.ingredients.isEmpty()}" class="text-muted">Nessun ingrediente specificato.</p>
+                </div>
+            </div>
 
             <h3>Procedimento</h3>
             <div class="p-3 bg-light rounded border" style="white-space: pre-wrap;" th:text="${recipe.procedureText}">

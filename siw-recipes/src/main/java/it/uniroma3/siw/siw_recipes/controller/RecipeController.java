@@ -71,7 +71,6 @@ public class RecipeController {
         String uploadDir = "recipe-images/" + savedRecipe.getId();
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
         
-        return "redirect:/recipe/" + savedRecipe.getId();
-    }
+return "redirect:/recipe/" + savedRecipe.getId() + "/ingredients";    }
 
 }

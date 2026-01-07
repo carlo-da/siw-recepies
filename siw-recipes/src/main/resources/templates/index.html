@@ -26,36 +26,30 @@
         </div>
     </header>
 
-    <section class="container mb-5">
+<section class="container mb-5">
         <div class="text-center mb-5">
             <h2 class="mb-2">Cosa vuoi cucinare oggi?</h2>
             <p class="text-muted">Lasciati ispirare dalle nostre categorie</p>
         </div>
-        <div class="row text-center g-4">
-            <div class="col-md-3 col-6">
-                <div class="p-4 border rounded-3 bg-light h-100">
-                    <div class="fs-1 mb-2">🍝</div>
-                    <h5>Primi Piatti</h5>
-                </div>
+        
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-md-3 col-6" th:each="cat : ${categories}">
+                <a th:href="@{'/category/' + ${cat.id}}" class="text-decoration-none text-dark">
+                    <div class="p-4 border rounded-3 bg-white h-100 shadow-sm recipe-card text-center d-flex flex-column justify-content-center align-items-center">
+                        
+                        <div class="fs-1 mb-2">🍽️</div>
+                        
+                        <h5 class="m-0 fw-bold text-uppercase" th:text="${cat.name}">Primi Piatti</h5>
+                        <small class="text-muted mt-2">Scopri ricette &rarr;</small>
+                    </div>
+                </a>
             </div>
-            <div class="col-md-3 col-6">
-                <div class="p-4 border rounded-3 bg-light h-100">
-                    <div class="fs-1 mb-2">🍰</div>
-                    <h5>Dolci</h5>
-                </div>
+
+            <div th:if="${categories == null || !categories.iterator().hasNext()}" class="col-12 text-center text-muted">
+                Nessuna categoria disponibile al momento.
             </div>
-            <div class="col-md-3 col-6">
-                <div class="p-4 border rounded-3 bg-light h-100">
-                    <div class="fs-1 mb-2">🥗</div>
-                    <h5>Veggie</h5>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="p-4 border rounded-3 bg-light h-100">
-                    <div class="fs-1 mb-2">⏱️</div>
-                    <h5>Veloci</h5>
-                </div>
-            </div>
+            
         </div>
     </section>
 

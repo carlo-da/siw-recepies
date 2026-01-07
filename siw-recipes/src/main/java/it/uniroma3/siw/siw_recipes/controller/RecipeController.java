@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import it.uniroma3.siw.siw_recipes.model.Category;
 import it.uniroma3.siw.siw_recipes.model.Recipe;
 import it.uniroma3.siw.siw_recipes.model.Review;
 import it.uniroma3.siw.siw_recipes.model.User;
@@ -157,6 +158,16 @@ public class RecipeController {
         List<Recipe> recipes = recipeRepository.findByTitleContainingIgnoreCase(keyword);
         model.addAttribute("recipes", recipes);
         return "recipeList";
+    }
+
+    @GetMapping("/category/{id}")
+    public String getRecipesByCategory(@PathVariable("id") Long id, Model model) {
+        Category category = categoryRepository.findById(id).get();
+        List<Recipe> recipes = recipeRepository.findByCategory(category);
+        model.addAttribute("recipes", recipes);
+        model.addAttribute("categoryName", category.getName()); 
+        
+        return "recipeList"; 
     }
 
 }

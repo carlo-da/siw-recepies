@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="~{fragments/base :: commonHeader('Tutte le Ricette')}"></head>
+
 <body>
     <nav th:replace="~{fragments/base :: navbar}"></nav>
 
     <div class="container py-5">
-        
+
         <div class="text-center mb-5">
             <span class="text-uppercase text-primary fw-bold small tracking-wide">Esplora</span>
-            <h1 class="font-heading display-4 mb-3">Tutte le Ricette</h1>
+            <h1 class="font-heading display-4 mb-3"
+                th:text="${categoryName != null} ? 'Ricette: ' + ${categoryName} : 'Tutte le Ricette'">
+                Tutte le Ricette
+            </h1>
             <p class="text-muted lead mx-auto" style="max-width: 600px;">
                 Dagli antipasti ai dolci, scopri le creazioni della nostra community.
             </p>
@@ -23,15 +28,17 @@
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
             <div class="col" th:each="recipe : ${recipes}">
-                
+
                 <a th:href="@{'/recipe/' + ${recipe.id}}" class="text-decoration-none">
                     <div class="recipe-card h-100 d-flex flex-column">
-                        
+
                         <div class="recipe-img-wrapper">
-                            <span class="category-badge" th:if="${recipe.category}" th:text="${recipe.category.name}">CAT</span>
-                            
+                            <span class="category-badge" th:if="${recipe.category}"
+                                th:text="${recipe.category.name}">CAT</span>
+
                             <img th:if="${recipe.imagePath}" th:src="@{${recipe.imagePath}}" alt="Foto Ricetta">
-                            <img th:unless="${recipe.imagePath}" src="https://via.placeholder.com/400x300?text=No+Image" alt="Placeholder">
+                            <img th:unless="${recipe.imagePath}" src="https://via.placeholder.com/400x300?text=No+Image"
+                                alt="Placeholder">
                         </div>
 
                         <div class="recipe-card-body flex-grow-1">
@@ -39,13 +46,14 @@
                             <p class="text-muted small mb-0" th:text="${#strings.abbreviate(recipe.description, 80)}">
                                 Descrizione breve...
                             </p>
-                            
+
                             <div class="recipe-meta">
                                 <span class="meta-item">
-                                    <i class="bi bi-clock"></i> <span th:text="${recipe.cookTime} + ' min'">30 min</span>
+                                    <i class="bi bi-clock"></i> <span th:text="${recipe.cookTime} + ' min'">30
+                                        min</span>
                                 </span>
                                 <span class="meta-item">
-                                    <i class="bi bi-bar-chart-fill"></i> 
+                                    <i class="bi bi-bar-chart-fill"></i>
                                     <span th:switch="${recipe.difficulty}">
                                         <span th:case="1">Facile</span>
                                         <span th:case="2">Facile</span>
@@ -66,4 +74,5 @@
 
     <footer th:replace="~{fragments/base :: footer}"></footer>
 </body>
+
 </html>

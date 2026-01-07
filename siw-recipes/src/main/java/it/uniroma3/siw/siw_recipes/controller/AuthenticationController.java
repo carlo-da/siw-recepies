@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import it.uniroma3.siw.siw_recipes.model.User;
+import it.uniroma3.siw.siw_recipes.repository.CategoryRepository;
 import it.uniroma3.siw.siw_recipes.repository.UserRepository;
 import jakarta.validation.Valid;
 
@@ -26,6 +27,9 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired 
+    private CategoryRepository categoryRepository;
+    
     // -----LOGIN-----
     @GetMapping("/login")
     public String showLoginForm() {
@@ -38,7 +42,7 @@ public class AuthenticationController {
         // Dati di default per evitare NullPointerException
         model.addAttribute("username", "Ospite");
         model.addAttribute("isAdmin", false);
-
+        model.addAttribute("categories", categoryRepository.findAll());
         // Recupera l'autenticazione
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 

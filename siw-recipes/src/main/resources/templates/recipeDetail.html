@@ -1,134 +1,171 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <title th:text="${recipe.title}">Dettaglio</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<head th:replace="~{fragments/base :: commonHeader(${recipe.title})}"></head>
 
-<body class="container py-5">
+<body>
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Home</a></li>
-            <li class="breadcrumb-item"><a href="/recipe/all">Ricette</a></li>
-            <li class="breadcrumb-item active" aria-current="page" th:text="${recipe.title}">Dettaglio</li>
-        </ol>
-    </nav>
+    <nav th:replace="~{fragments/base :: navbar}"></nav>
 
-    <div class="row">
-        <div class="col-md-8">
-            <h1 class="display-4" th:text="${recipe.title}">Titolo Ricetta</h1>
-            <p class="lead text-muted" th:text="${recipe.description}">Descrizione breve</p>
+    <header class="hero-header">
+        <div class="container">
+            <span th:if="${recipe.category}" class="badge bg-secondary text-uppercase tracking-wide mb-2" 
+                  style="letter-spacing: 2px; font-weight: 600;" 
+                  th:text="${recipe.category.name}">DOLCI</span>
 
-            <div class="mb-4">
-                <span class="badge bg-primary">Tempo: <span th:text="${recipe.cookTime}">0</span> min</span>
-                <span class="badge bg-warning text-dark">Difficoltà: <span
-                        th:text="${recipe.difficulty}">1</span>/5</span>
-
-                <span th:if="${recipe.category}" class="badge bg-success"
-                    th:text="${recipe.category.name}">Categoria</span>
-
-                <span class="text-muted ms-2">Autore: <strong
-                        th:text="${recipe.author.name} + ' ' + ${recipe.author.surname}">Nome</strong></span>
-            </div>
-
-            <hr>
-
-            <div class="row mb-4">
-                <div class="col-md-12">
-                    <h4>Ingredienti</h4>
-                    <ul>
-                        <li th:each="ing : ${recipe.ingredients}">
-                            <strong th:text="${ing.quantity}">Quantità</strong>
-                            <span th:text="${ing.name}">Nome Ingrediente</span>
-                        </li>
-                    </ul>
-                    <p th:if="${recipe.ingredients.isEmpty()}" class="text-muted">Nessun ingrediente specificato.</p>
-                </div>
-            </div>
+            <h1 class="display-4 fw-bold mt-2 mb-3" th:text="${recipe.title}">Titolo Ricetta</h1>
             
+            <div class="d-flex justify-content-center align-items-center flex-wrap gap-3 text-muted">
+                <span class="d-flex align-items-center gap-1">
+                    <i class="bi bi-person-circle text-primary"></i> 
+                    <span class="fw-bold text-dark" th:text="${recipe.author.name} + ' ' + ${recipe.author.surname}">Chef Mario</span>
+                </span>
+                <span class="d-none d-md-inline">•</span>
+                <span class="d-flex align-items-center gap-1">
+                    <i class="bi bi-clock"></i> <span th:text="${recipe.cookTime} + ' min'">45 min</span>
+                </span>
+                <span class="d-none d-md-inline">•</span>
+                
+                <span class="text-warning" title="Difficoltà">
+                    <i th:each="i : ${#numbers.sequence(1, recipe.difficulty)}" class="bi bi-star-fill"></i>
+                    <i th:if="${recipe.difficulty < 5}" th:each="i : ${#numbers.sequence(recipe.difficulty + 1, 5)}" class="bi bi-star text-muted opacity-25"></i>
+                </span>
+            </div>
+        </div>
+    </header>
 
-            <h3>Procedimento</h3>
-            <div class="p-3 bg-light rounded border" style="white-space: pre-wrap;" th:text="${recipe.procedureText}">
-                Testo del procedimento...
+    <div class="container pb-5">
+        
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-10">
+                <div class="shadow-lg rounded-3 overflow-hidden">
+                    <img th:if="${recipe.imagePath}" th:src="@{${recipe.imagePath}}" class="w-100" style="max-height: 550px; object-fit: cover;" alt="Foto Ricetta">
+                    <img th:unless="${recipe.imagePath}" src="https://via.placeholder.com/1200x600?text=Nessuna+Foto+Disponibile" class="w-100" alt="Placeholder">
+                </div>
             </div>
         </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm">
-
-                <img th:if="${recipe.imagePath}" th:src="@{${recipe.imagePath}}" class="card-img-top"
-                    style="object-fit: cover; height: 300px;" alt="Foto Ricetta">
-
-                <img th:unless="${recipe.imagePath}" src="https://via.placeholder.com/400x300?text=Nessuna+Foto"
-                    class="card-img-top" alt="Anteprima">
-
-                <div class="card-body">
-                    <p class="card-text text-center text-muted" th:text="${recipe.title}">Didascalia</p>
-                </div>
-            </div>
-
-            <div class="d-grid gap-2 mt-3">
-                <a href="/recipe/all" class="btn btn-secondary">Torna all'elenco</a>
-            </div>
-            <div class="row mt-5 mb-5">
-        <div class="col-md-8">
-            <h3 class="border-bottom pb-2">Recensioni degli Utenti</h3>
-
-            <div class="mt-4">
-                <div th:each="rev : ${recipe.reviews}" class="card mb-3 shadow-sm">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0" th:text="${rev.title}">Titolo Recensione</h5>
-                            <span class="badge bg-warning text-dark border border-warning">
-                                <span th:text="${rev.score}">5</span>/5 ⭐
-                            </span>
-                        </div>
-                        <h6 class="card-subtitle mt-2 text-muted small">
-                            Scritto da: <span th:text="${rev.author.name}">Nome Autore</span>
-                        </h6>
-                        <p class="card-text mt-3" th:text="${rev.text}">Testo della recensione...</p>
-                    </div>
-                </div>
-                
-                <div th:if="${recipe.reviews.isEmpty()}" class="alert alert-info">
-                    Nessuna recensione presente. Sii il primo a dire la tua!
-                </div>
-                <div class="card bg-light border-0 p-4 mt-5">
-                <h4>Lascia una Recensione</h4>
-                <p class="text-muted small">Condividi la tua opinione con la community.</p>
-                
-                <form th:action="@{'/recipe/' + ${recipe.id} + '/review'}" th:object="${review}" method="post">
+        <div class="row g-5">
+            
+            <div class="col-lg-4">
+                <div class="ingredient-box sticky-top" style="top: 100px; z-index: 1;">
+                    <h4 class="mb-4 font-heading border-bottom pb-2">Lista della Spesa</h4>
                     
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Titolo</label>
-                        <input type="text" th:field="*{title}" class="form-control" placeholder="Es. Risultato perfetto!" required>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent px-0 py-2 d-flex justify-content-between align-items-center" 
+                            th:each="ing : ${recipe.ingredients}">
+                            <span class="lead fs-6" th:text="${ing.name}">Farina</span>
+                            <span class="badge bg-light text-dark border fw-bold" th:text="${ing.quantity}">500g</span>
+                        </li>
+                    </ul>
+                    
+                    <div th:if="${recipe.ingredients.isEmpty()}" class="text-muted small fst-italic mt-2">
+                        Nessun ingrediente specificato.
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">Voto</label>
-                        <select th:field="*{score}" class="form-select">
-                            <option value="5">⭐⭐⭐⭐⭐ - Eccellente</option>
-                            <option value="4">⭐⭐⭐⭐ - Molto Buona</option>
-                            <option value="3">⭐⭐⭐ - Media</option>
-                            <option value="2">⭐⭐ - Non mi è piaciuta</option>
-                            <option value="1">⭐ - Pessima</option>
-                        </select>
+                    <div class="mt-4 pt-3 border-top text-center" 
+                         th:if="${#authentication.name == recipe.author.email}">
+                        <p class="small text-muted mb-2">Gestisci la tua ricetta</p>
+                        <div class="d-grid gap-2">
+                            <a th:href="@{'/recipe/edit/' + ${recipe.id}}" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-pencil-square"></i> Modifica Ricetta
+                            </a>
+                            <a th:href="@{'/recipe/delete/' + ${recipe.id}}" class="btn btn-outline-danger btn-sm"
+                               onclick="return confirm('Sei sicuro di voler eliminare questa ricetta?');">
+                                <i class="bi bi-trash"></i> Elimina
+                            </a>
+                        </div>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-bold">La tua esperienza</label>
-                        <textarea th:field="*{text}" class="form-control" rows="3" placeholder="Scrivi qui cosa ne pensi..."></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-dark">Pubblica Recensione</button>
-                </form>
+                </div>
             </div>
-            </div>
+
+            <div class="col-lg-8">
+                
+                <div class="mb-5">
+                    <h3 class="mb-4 font-heading">Preparazione</h3>
+                    
+                    <p class="lead text-muted fst-italic mb-4" th:text="${recipe.description}">
+                        Descrizione introduttiva della ricetta...
+                    </p>
+                    
+                    <div class="procedure-text p-4 bg-light rounded-3 border-start border-4 border-primary shadow-sm" 
+                         style="white-space: pre-wrap; font-size: 1.1rem; line-height: 1.8; color: #444;"
+                         th:text="${recipe.procedureText}">
+                        Testo del procedimento...
+                    </div>
+                </div>
+
+                <div class="mt-5 pt-5 border-top" id="reviews-section">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="font-heading m-0">Cosa ne pensano gli altri</h3>
+                        <span class="badge bg-dark rounded-pill" th:text="${recipe.reviews.size() + ' Recensioni'}">0 Recensioni</span>
+                    </div>
+
+                    <div class="mb-5">
+                        <div th:each="rev : ${recipe.reviews}" class="card border-0 shadow-sm mb-3">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="fw-bold mb-1" th:text="${rev.title}">Titolo</h6>
+                                        <small class="text-muted">di <span th:text="${rev.author.name}">Utente</span></small>
+                                    </div>
+                                    <div class="text-warning small">
+                                        <i th:each="i : ${#numbers.sequence(1, rev.score)}" class="bi bi-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="card-text text-secondary mb-0" th:text="${rev.text}">Testo...</p>
+                            </div>
+                        </div>
+
+                        <div th:if="${recipe.reviews.isEmpty()}" class="text-center py-4 text-muted bg-light rounded">
+                            <i class="bi bi-chat-square-text fs-3 d-block mb-2"></i>
+                            Ancora nessuna recensione. Sii il primo!
+                        </div>
+                    </div>
+
+                    <div class="card bg-white border shadow-sm p-4 rounded-3">
+                        <h5 class="mb-3 fw-bold">Hai provato questa ricetta?</h5>
+                        <p class="text-muted small mb-3">Lascia un voto e un commento per aiutare la community.</p>
+                        
+                        <form th:action="@{'/recipe/' + ${recipe.id} + '/review'}" th:object="${review}" method="post">
+                            
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <div class="form-floating">
+                                        <input type="text" th:field="*{title}" class="form-control" id="revTitle" placeholder="Titolo" required>
+                                        <label for="revTitle">Titolo (es. Buonissima!)</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <select th:field="*{score}" class="form-select" id="revScore">
+                                            <option value="5">5 - Eccellente 🌟</option>
+                                            <option value="4">4 - Molto Buona 👍</option>
+                                            <option value="3">3 - Media 😐</option>
+                                            <option value="2">2 - Non mi piace 👎</option>
+                                            <option value="1">1 - Pessima 🤢</option>
+                                        </select>
+                                        <label for="revScore">Voto</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea th:field="*{text}" class="form-control" id="revText" style="height: 100px" placeholder="Commento"></textarea>
+                                        <label for="revText">La tua esperienza...</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-primary px-4 rounded-pill fw-bold">Pubblica Recensione</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
         </div>
     </div>
 
-</body>
+    <footer th:replace="~{fragments/base :: footer}"></footer>
 
+</body>
 </html>

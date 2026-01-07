@@ -35,6 +35,7 @@ public class AuthConfig {
                 .requestMatchers("/css/**", "/images/**", "/js/**").permitAll()
                 .requestMatchers("/", "/index", "/register", "/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/recipe/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/recipe-images/**").permitAll()
                 // Area Admin
                 .requestMatchers("/admin/**").hasAuthority("ADMIN")
                 // Tutto il resto richiede login

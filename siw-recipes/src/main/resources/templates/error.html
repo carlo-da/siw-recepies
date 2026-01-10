@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/base :: commonHeader('Ops! - SiwRecipes')}"></head>
+<body>
+    <nav th:replace="~{fragments/base :: navbar}"></nav>
+
+    <div class="container py-5 text-center">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="display-1 text-muted mb-4">🍳</div>
+                <h1 class="display-4 fw-bold mb-3">Qualcosa è andato storto</h1>
+                <p class="lead text-muted mb-5">
+                    Non riusciamo a trovare la pagina che stai cercando, oppure si è bruciato qualcosa in cucina.
+                </p>
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/" class="btn btn-primary btn-lg rounded-pill px-4">Torna alla Home</a>
+                    <a href="/recipe/all" class="btn btn-outline-secondary btn-lg rounded-pill px-4">Cerca Ricette</a>
+                </div>
+                
+                <div class="mt-5 p-3 bg-light rounded text-start small font-monospace text-muted">
+                    <strong>Status:</strong> <span th:text="${status}">500</span><br>
+                    <strong>Error:</strong> <span th:text="${error}">Internal Server Error</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/base :: footer}"></footer>
+</body>
+</html>

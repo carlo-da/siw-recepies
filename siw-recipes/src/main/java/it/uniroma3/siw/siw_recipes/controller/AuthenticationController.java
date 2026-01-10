@@ -27,9 +27,9 @@ public class AuthenticationController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired 
+    @Autowired
     private CategoryRepository categoryRepository;
-    
+
     // -----LOGIN-----
     @GetMapping("/login")
     public String showLoginForm() {
@@ -89,5 +89,10 @@ public class AuthenticationController {
         userRepository.save(user);
 
         return "redirect:/login?success";//Redirect al login
+    }
+
+    @GetMapping("/about")
+    public String about() {
+        return "about";
     }
 }

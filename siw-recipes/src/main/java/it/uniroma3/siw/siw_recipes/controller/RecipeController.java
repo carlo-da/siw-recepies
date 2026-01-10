@@ -154,9 +154,10 @@ public class RecipeController {
 
     //-------CERCA RICETTA------
     @PostMapping("/search")
-    public String searchRecipes(Model model, @RequestParam String keyword) {
-        List<Recipe> recipes = recipeRepository.findByTitleContainingIgnoreCase(keyword);
+    public String searchRecipes(@RequestParam("keyword") String keyword, Model model) {
+        List<Recipe> recipes = recipeRepository.findByTitleContainingIgnoreCase(keyword);// Cerca nel DB
         model.addAttribute("recipes", recipes);
+        model.addAttribute("pageTitle", "Risultati per: " + keyword);
         return "recipeList";
     }
 

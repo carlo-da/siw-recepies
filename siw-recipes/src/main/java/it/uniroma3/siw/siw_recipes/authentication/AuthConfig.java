@@ -33,7 +33,7 @@ public class AuthConfig {
                 .authorizeHttpRequests((requests) -> requests
                 // Risorse statiche e Pagine Pubbliche
                 .requestMatchers("/css/**", "/images/**", "/js/**").permitAll()
-                .requestMatchers("/", "/index", "/register", "/login").permitAll()
+                .requestMatchers("/", "/index", "/register", "/login", "/about").permitAll()
                 .requestMatchers(HttpMethod.GET, "/recipe/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/recipe-images/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/category/**").permitAll()

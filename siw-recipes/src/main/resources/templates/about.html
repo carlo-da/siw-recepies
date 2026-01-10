@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/base :: commonHeader('Chi Siamo')}"></head>
+<body>
+    <nav th:replace="~{fragments/base :: navbar}"></nav>
+
+    <div class="container py-5 text-center">
+        <img src="https://ui-avatars.com/api/?name=Siw+Recipes&background=00b894&color=fff&size=128" class="rounded-circle mb-4 shadow">
+        <h1 class="font-heading display-4">Chi Siamo</h1>
+        <p class="lead text-muted mx-auto mb-5" style="max-width: 700px;">
+            SiwRecipes nasce come progetto universitario per il corso di Sistemi Informativi su Web.
+            L'obiettivo è creare una piattaforma semplice e moderna per condividere la passione per la cucina.
+        </p>
+        
+        <div class="row justify-content-center g-4 mt-4">
+            <div class="col-md-4">
+                <div class="p-4 border rounded bg-white shadow-sm h-100">
+                    <h3>🎓</h3>
+                    <h5>Progetto Esame</h5>
+                    <p class="small text-muted">Sviluppato con Spring Boot, Thymeleaf e PostgreSQL.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 border rounded bg-white shadow-sm h-100">
+                    <h3>👨‍💻</h3>
+                    <h5>Lo Sviluppatore</h5>
+                    <p class="small text-muted">Creato da <strong>un semplice nerd.</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/base :: footer}"></footer>
+</body>
+</html>
